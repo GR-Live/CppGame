@@ -7,7 +7,8 @@
 */
 
 // Includes
-#include <stdio.h> // Allows vectors, strings, maps, etc. (You should know this by now.)
+#include <stdio.h> // Allows vectors, maps, etc. (You should know this by now.)
+#include "cppgame.h"
 
 // Generate Window
 
