@@ -6,11 +6,10 @@
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 */
 
-// Includes
 #include "cppgame.h"
 #include <windows.h>
 
-namespace cppgame{
+namespace cppgame {
     // Get the Current User's Operating System. Different operating systems (oses) have different APIs you need to use. This code is trying to be made to be universal.
     std::string CPPGAME::getOperatingSystem()
     {
@@ -26,85 +25,88 @@ namespace cppgame{
         return "blank";
     }
 
-    // Operating System APIs
+    // Windows API Function
     void CPPGAME::Windows(std::string Name, int sizeX, int sizeY, HINSTANCE hInstance) {
-        // This will use the complex and well integrated Win32 API.
-        // https://learn.microsoft.com this is the source I used for this function
+        // Convert std::string to std::wstring for wide-character strings (wchar_t)
+        std::wstring wideName(Name.begin(), Name.end());
+
+        LPCWSTR CLASS_NAME = wideName.c_str();  // Use wide-character class name
+        LPCWSTR WindowName = wideName.c_str();  // Use wide-character window name
+
+        WNDCLASSW wc = { };  // Use WNDCLASSW for wide-character windows API
+
+        wc.lpfnWndProc   = WindowProc;          // Set the WindowProc callback function
+        wc.hInstance     = hInstance;           // Application instance
+        wc.lpszClassName = CLASS_NAME;          // Assign the wide-character class name
         
-        const wchar_t CLASS_NAME[]  = L"CPPGame_Class";
-        const wchar_t* WindowName = std::wstring(Name.begin(),Name.end()).c_str();
+        // Register the window class (ensure you're using the wide version)
+        if (RegisterClassW(&wc) == 0) {
+            return;  // Return if window class registration failed
+        }
 
-        WNDCLASS wc = { };
-
-        wc.lpfnWndProc   = WindowProc;
-        wc.hInstance     = hInstance;
-        wc.lpszClassName = CLASS_NAME;
-
-        RegisterClass(&wc);
-        HWND hwnd = CreateWindowEx(
-            0,                              // Optional window styles.
+        // Create the window using CreateWindowExW (wide-character version)
+        HWND hwnd = CreateWindowExW(
+            0,                              // Optional window styles
             CLASS_NAME,                     // Window class
-            WindowName,    // Window text
+            WindowName,                     // Window text (title)
             WS_OVERLAPPEDWINDOW,            // Window style
-
-            // Size and position
-            CW_USEDEFAULT, CW_USEDEFAULT/*Location*/, sizeX, sizeY/*Actual window*/,
-
-            NULL,       // Parent window    
-            NULL,       // Menu
-            hInstance,  // Instance handle
-            NULL        // Additional application data
+            CW_USEDEFAULT, CW_USEDEFAULT,   // Location (default)
+            sizeX, sizeY,                   // Size of the window
+            NULL,                           // Parent window    
+            NULL,                           // Menu
+            hInstance,                      // Application instance handle
+            NULL                            // Additional application data
         );
 
         if (!hwnd) {
-            return;
+            return;  // Return if window creation failed
         }
 
-        ShowWindow(hwnd,SW_SHOWNORMAL);
+        // Display and update the window
+        ShowWindow(hwnd, SW_SHOWNORMAL);
         UpdateWindow(hwnd);
 
+        // Handle Windows messages
         MSG msg;
-        while (GetMessage(&msg,NULL,0,0)>0){
+        while (GetMessage(&msg, NULL, 0, 0) > 0) {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
         }
     }
 
     void CPPGAME::Linux(std::string Name, int sizeX, int sizeY) {
-
+        // For Linux-specific code here
     }
 
     void CPPGAME::Mac(std::string Name, int sizeX, int sizeY) {
-
+        // For Mac-specific code here
     }
 
-    // Generate Window based on the result from getOperatingSystem()
-    void CPPGAME::GenerateWindow(std::string Name, int sizeX, int sizeY,HINSTANCE hInstance){
+    // Function to generate the window for a specific OS
+    void CPPGAME::GenerateWindow(std::string Name, int sizeX, int sizeY, HINSTANCE hInstance) {
         os = getOperatingSystem();
 
-        // Checks the Operating System and sends it to their respective APIs
-        // This pains me. I'm not like YendereDev. 
-        if (os == "Windows"){
-            Windows(Name,sizeX,sizeY, hInstance);
-        } else if (os == "Linux"){
-            Linux(Name,sizeX,sizeY);
-        } else if (os == "Apple"){
-            Mac(Name,sizeX,sizeY);
+        if (os == "Windows") {
+            Windows(Name, sizeX, sizeY, hInstance);
+        } else if (os == "Linux") {
+            Linux(Name, sizeX, sizeY);
+        } else if (os == "Apple") {
+            Mac(Name, sizeX, sizeY);
         } else {
             std::cerr << "GRCG01: The current operating system can't be identified." << std::endl;
-            return;
         }
     }
 }
 
+// Window Procedure for Windows messages
 #ifdef _WIN32
 LRESULT CALLBACK cppgame::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     switch (uMsg) {
         case WM_DESTROY:
             PostQuitMessage(0);
             return 0;
-        // Handle other cases if necessary
+        // Handle other messages if necessary
     }
-    return DefWindowProc(hwnd, uMsg, wParam, lParam);  // Default handling for unhandled messages
+    return DefWindowProc(hwnd, uMsg, wParam, lParam);  // Default handling
 }
 #endif
