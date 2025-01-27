@@ -30,14 +30,18 @@ namespace cppgame {
         const char* CLASS_NAME = Name.c_str();  // Use wide-character class name
         const char* WindowName = Name.c_str();  // Use wide-character window name
 
-        WNDCLASSA wc = { };  // Use WNDCLASSW for wide-character windows API
+        WNDCLASSEXA wc = { };  // Use WNDCLASSW for wide-character windows API
 
         wc.lpfnWndProc   = WindowProc;          // Set the WindowProc callback function
         wc.hInstance     = hInstance;           // Application instance
         wc.lpszClassName = CLASS_NAME;          // Assign the wide-character class name
         
+        wc.hIcon = (HICON)LoadImageA(NULL, favicon.c_str(), IMAGE_ICON,32,32,LR_LOADFROMFILE);    // Default application icon 
+        if (!wc.hIcon) {
+            std::cerr << "Failed to load icon from path: " << favicon << std::endl;
+        }
         // Register the window class (ensure you're using the wide version)
-        if (RegisterClassA(&wc) == 0) {
+        if (RegisterClassExA(&wc) == 0) {
             std::cerr << "GRCG02: Can't register window class. \n";
             return;  // Return if window class registration failed
         }
@@ -122,7 +126,7 @@ LRESULT CALLBACK cppgame::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     cppgame::CPPGAME game;
-    game.GenerateWindow("Test", 500, 500, hInstance);
     game.favicon = "Assets/DefaultIcon32.ico";
+    game.GenerateWindow("Test", 500, 500, hInstance);
     return 0;
 }
