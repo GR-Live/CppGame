@@ -13,21 +13,18 @@
 
 namespace cppgame
 {
+    using WindowHandle = void*;
     class CPPGAME {
     private:
-        #ifdef _WIN32
-        void Windows(std::string Name, int sizeX, int sizeY, HINSTANCE hInstance);
-        #endif
-        void Linux(std::string Name, int sizeX, int sizeY);
-        void Mac(std::string Name, int sizeX, int sizeY);
+        HWND Windows(std::string Name, int sizeX, int sizeY, HINSTANCE hInstance);
+        void* Linux(std::string Name, int sizeX, int sizeY);
+        void* Mac(std::string Name, int sizeX, int sizeY);
     protected:
         std::string os = "";
     public:
-        #ifdef _WIN32
-        void SetFavicon(std::string Path);
-        #endif
+        void SetFavicon(std::string Path, HWND hwnd);
         std::string getOperatingSystem(); // Get the operating system of the user
-        void GenerateWindow(std::string Name, int sizeX, int sizeY,HINSTANCE hInstance);
+        WindowHandle GenerateWindow(std::string Name, int sizeX, int sizeY,HINSTANCE hInstance);
         std::string favicon =""/*= "Assets/DefaultIcon32"*/;
     };
     #ifdef _WIN32

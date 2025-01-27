@@ -27,20 +27,24 @@ namespace cppgame {
 
     #ifdef _WIN32
     // Windows API Function
-    void CPPGAME::Windows(std::string Name, int sizeX, int sizeY, HINSTANCE hInstance) {
+    HWND CPPGAME::Windows(std::string Name, int sizeX, int sizeY, HINSTANCE hInstance) {
         const char* CLASS_NAME = Name.c_str();  // Use wide-character class name
         const char* WindowName = Name.c_str();  // Use wide-character window name
 
         WNDCLASSEXA wc = { };  // Use WNDCLASSW for wide-character windows API
 
-        wc.lpfnWndProc   = WindowProc;          // Set the WindowProc callback function
-        wc.hInstance     = hInstance;           // Application instance
-        wc.lpszClassName = CLASS_NAME;          // Assign the wide-character class name
+        wc.cbSize = sizeof(WNDCLASSEXW);
+        wc.style = CS_HREDRAW | CS_VREDRAW;
+        wc.lpfnWndProc = WindowProc;
+        wc.hInstance = hInstance;
+        wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+        wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+        wc.lpszClassName = CLASS_NAME;
         
         // Register the window class (ensure you're using the wide version)
         if (RegisterClassExA(&wc) == 0) {
             std::cerr << "GRCG02: Can't register window class. \n";
-            return;  // Return if window class registration failed
+            return nullptr;  // Return if window class registration failed
         }
 
         // Create the window using CreateWindowExW (wide-character version)
@@ -58,55 +62,54 @@ namespace cppgame {
         );
 
         if (!hwnd) {
-            return;  // Return if window creation failed
+            std::cerr << "GRCG03: Window is Invalid. \n";
+            return nullptr;  // Return if window creation failed
         }
 
         // Display and update the window
         ShowWindow(hwnd, SW_SHOWNORMAL);
         UpdateWindow(hwnd);
 
-        // Handle Windows messages
-        MSG msg;
-        while (GetMessage(&msg, NULL, 0, 0) > 0) {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-        }
+        return hwnd;
     }
     #endif
 
-    void CPPGAME::Linux(std::string Name, int sizeX, int sizeY) {
+    void* CPPGAME::Linux(std::string Name, int sizeX, int sizeY) {
         std::cerr << "Debug Error. This class hasn't been implemented yet." << std::endl;
-        return;
+        return nullptr;
     }
 
-    void CPPGAME::Mac(std::string Name, int sizeX, int sizeY) {
+    void* CPPGAME::Mac(std::string Name, int sizeX, int sizeY) {
         std::cerr << "Debug Error. This class hasn't been implemented yet." << std::endl;
-        return;
+        return nullptr;
     }
 
-    #ifdef _WIN32
-    void CPPGAME::SetFavicon(std::string Path){
+    void CPPGAME::SetFavicon(std::string Path, HWND hwnd){
         HICON hIcon;
         hIcon = (HICON)LoadImageA(NULL, Path.c_str(), IMAGE_ICON,32,32,LR_LOADFROMFILE);    // Default application icon 
         if (!hIcon) {
             std::cerr << "Failed to load icon from path: " << Path << std::endl;
             return;
+        } else {
+            std::cout << "Loaded Icon: " << Path;
         }
+
+        SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
     }
-    #endif
+
     // Function to generate the window for a specific OS
-    void CPPGAME::GenerateWindow(std::string Name, int sizeX, int sizeY, HINSTANCE hInstance) {
+    WindowHandle CPPGAME::GenerateWindow(std::string Name, int sizeX, int sizeY, HINSTANCE hInstance) {
         os = getOperatingSystem();
 
         if (os == "Windows") {
-            Windows(Name, sizeX, sizeY, hInstance);
+            return Windows(Name, sizeX, sizeY, hInstance);
         } else if (os == "Linux") {
-            Linux(Name, sizeX, sizeY);
+            return Linux(Name, sizeX, sizeY);
         } else if (os == "Apple") {
-            Mac(Name, sizeX, sizeY);
+            return Mac(Name, sizeX, sizeY);
         } else {
             std::cerr << "GRCG01: The current operating system can't be identified." << std::endl;
-            return;
+            return nullptr;
         }
     }
 }
@@ -137,8 +140,13 @@ LRESULT CALLBACK cppgame::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     cppgame::CPPGAME game;
     game.favicon = "Assets/DefaultIcon32.ico";
-    game.GenerateWindow("Test", 500, 500, hInstance);
-    game.SetFavicon(game.favicon);
+    cppgame::WindowHandle hwnd = game.GenerateWindow("Test", 500, 500, hInstance);
+    game.SetFavicon(game.favicon, (HWND)hwnd); 
+    MSG msg;
+    while (GetMessage(&msg, NULL, 0, 0) > 0) {
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
     return 0;
 }
 #endif
