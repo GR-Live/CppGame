@@ -84,6 +84,7 @@ namespace cppgame {
         return;
     }
 
+    #ifdef _WIN32
     void CPPGAME::SetFavicon(std::string Path){
         HICON hIcon;
         hIcon = (HICON)LoadImageA(NULL, Path.c_str(), IMAGE_ICON,32,32,LR_LOADFROMFILE);    // Default application icon 
@@ -92,7 +93,7 @@ namespace cppgame {
             return;
         }
     }
-
+    #endif
     // Function to generate the window for a specific OS
     void CPPGAME::GenerateWindow(std::string Name, int sizeX, int sizeY, HINSTANCE hInstance) {
         os = getOperatingSystem();
@@ -105,6 +106,7 @@ namespace cppgame {
             Mac(Name, sizeX, sizeY);
         } else {
             std::cerr << "GRCG01: The current operating system can't be identified." << std::endl;
+            return;
         }
     }
 }
