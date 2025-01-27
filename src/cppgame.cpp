@@ -10,7 +10,6 @@
 #include "cppgame.h"
 
 // Get the Current User's Operating System. Different operating systems (oses) have different APIs you need to use. This code is trying to be made to be universal.
-
 std::string getOperatingSystem()
 {
     #ifdef _WIN32
@@ -24,7 +23,6 @@ std::string getOperatingSystem()
 }
 
 // Operating System APIs
-
 void Windows(std::string Name, int sizeX, int sizeY) {
     // This will use the complex and well integrated Win32 API.
 }
