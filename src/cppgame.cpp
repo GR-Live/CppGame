@@ -27,26 +27,23 @@ namespace cppgame {
 
     // Windows API Function
     void CPPGAME::Windows(std::string Name, int sizeX, int sizeY, HINSTANCE hInstance) {
-        // Convert std::string to std::wstring for wide-character strings (wchar_t)
-        std::wstring wideName(Name.begin(), Name.end());
+        const char* CLASS_NAME = Name.c_str();  // Use wide-character class name
+        const char* WindowName = Name.c_str();  // Use wide-character window name
 
-        LPCWSTR CLASS_NAME = wideName.c_str();  // Use wide-character class name
-        LPCWSTR WindowName = wideName.c_str();  // Use wide-character window name
-
-        WNDCLASSW wc = { };  // Use WNDCLASSW for wide-character windows API
+        WNDCLASSA wc = { };  // Use WNDCLASSW for wide-character windows API
 
         wc.lpfnWndProc   = WindowProc;          // Set the WindowProc callback function
         wc.hInstance     = hInstance;           // Application instance
         wc.lpszClassName = CLASS_NAME;          // Assign the wide-character class name
         
         // Register the window class (ensure you're using the wide version)
-        if (RegisterClassW(&wc) == 0) {
+        if (RegisterClassA(&wc) == 0) {
             std::cerr << "GRCG02: Can't register window class. \n";
             return;  // Return if window class registration failed
         }
 
         // Create the window using CreateWindowExW (wide-character version)
-        HWND hwnd = CreateWindowExW(
+        HWND hwnd = CreateWindowExA(
             0,                              // Optional window styles
             CLASS_NAME,                     // Window class
             WindowName,                     // Window text (title)
@@ -105,6 +102,17 @@ LRESULT CALLBACK cppgame::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
     switch (uMsg) {
         case WM_DESTROY:
             PostQuitMessage(0);
+            return 0;
+
+        case WM_PAINT:{
+            PAINTSTRUCT ps;
+            HDC hdc = BeginPaint(hwnd,&ps);
+            FillRect(hdc,&ps.rcPaint, (HBRUSH)(COLOR_WINDOW+1));
+            EndPaint(hwnd,&ps);
+            return 0;
+        }
+        case WM_SIZE:
+            InvalidateRect(hwnd, NULL, TRUE);
             return 0;
         // Handle other messages if necessary
     }
