@@ -27,4 +27,10 @@ std::string getOperatingSystem()
 
 void GenerateWindow(std::string Name, int sizeX, int sizeY){
     std::string os = getOperatingSystem();
+
+    // Checks to see if os is blank
+    if (os == "blank"){
+        std::cerr << "GRCG01: The current operating system can't be identified." << std::endl;
+        return;
+    }
 }
