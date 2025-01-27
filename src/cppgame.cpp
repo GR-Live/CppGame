@@ -36,10 +36,6 @@ namespace cppgame {
         wc.hInstance     = hInstance;           // Application instance
         wc.lpszClassName = CLASS_NAME;          // Assign the wide-character class name
         
-        wc.hIcon = (HICON)LoadImageA(NULL, favicon.c_str(), IMAGE_ICON,32,32,LR_LOADFROMFILE);    // Default application icon 
-        if (!wc.hIcon) {
-            std::cerr << "Failed to load icon from path: " << favicon << std::endl;
-        }
         // Register the window class (ensure you're using the wide version)
         if (RegisterClassExA(&wc) == 0) {
             std::cerr << "GRCG02: Can't register window class. \n";
@@ -82,6 +78,14 @@ namespace cppgame {
 
     void CPPGAME::Mac(std::string Name, int sizeX, int sizeY) {
         std::cerr << "Debug Error. This class hasn't been implemented yet." << std::endl;
+    }
+
+    void CPPGAME::SetFavicon(std::string Path){
+        HICON hIcon;
+        hIcon = (HICON)LoadImageA(NULL, Path.c_str(), IMAGE_ICON,32,32,LR_LOADFROMFILE);    // Default application icon 
+        if (!hIcon) {
+            std::cerr << "Failed to load icon from path: " << Path << std::endl;
+        }
     }
 
     // Function to generate the window for a specific OS
@@ -128,5 +132,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     cppgame::CPPGAME game;
     game.favicon = "Assets/DefaultIcon32.ico";
     game.GenerateWindow("Test", 500, 500, hInstance);
+    game.SetFavicon(game.favicon);
     return 0;
 }

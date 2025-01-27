@@ -21,6 +21,7 @@ namespace cppgame
     protected:
         std::string os = "";
     public:
+        void SetFavicon(std::string Path);
         std::string getOperatingSystem(); // Get the operating system of the user
         void GenerateWindow(std::string Name, int sizeX, int sizeY,HINSTANCE hInstance);
         std::string favicon =""/*= "Assets/DefaultIcon32"*/;
