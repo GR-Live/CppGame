@@ -18,7 +18,8 @@ namespace cppgame
         void Windows(std::string Name, int sizeX, int sizeY);
         void Linux(std::string Name, int sizeX, int sizeY);
         void Mac(std::string Name, int sizeX, int sizeY);
-
+    protected:
+        std::string os = "";
     public:
         void GenerateWindow(std::string Name, int sizeX, int sizeY);
     };
