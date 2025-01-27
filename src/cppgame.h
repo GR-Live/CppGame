@@ -15,13 +15,13 @@ namespace cppgame
 {
     class CPPGAME {
     private:
-        std::string getOperatingSystem();
         void Windows(std::string Name, int sizeX, int sizeY, HINSTANCE hInstance);
         void Linux(std::string Name, int sizeX, int sizeY);
         void Mac(std::string Name, int sizeX, int sizeY);
     protected:
         std::string os = "";
     public:
+        std::string getOperatingSystem(); // Get the operating system of the user
         void GenerateWindow(std::string Name, int sizeX, int sizeY,HINSTANCE hInstance);
         std::string favicon =""/*= "Assets/DefaultIcon32"*/;
     };
