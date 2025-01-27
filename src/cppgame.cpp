@@ -100,10 +100,11 @@ namespace cppgame {
 #ifdef _WIN32
 LRESULT CALLBACK cppgame::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     switch (uMsg) {
+        // Destroys the Window
         case WM_DESTROY:
             PostQuitMessage(0);
             return 0;
-
+        // Makes the window scale up and down
         case WM_PAINT:{
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd,&ps);
@@ -114,7 +115,6 @@ LRESULT CALLBACK cppgame::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
         case WM_SIZE:
             InvalidateRect(hwnd, NULL, TRUE);
             return 0;
-        // Handle other messages if necessary
     }
     return DefWindowProc(hwnd, uMsg, wParam, lParam);  // Default handling
 }
