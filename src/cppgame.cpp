@@ -13,7 +13,13 @@
 
 std::string getOperatingSystem()
 {
-
+    #ifdef _WIN32
+        return "Windows";
+    #elif __LINUX__
+        return "Linux";
+    #elif __APPLE__
+        return "Apple";
+    #endif
     return "blank";
 }
 
