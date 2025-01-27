@@ -25,6 +25,7 @@ namespace cppgame {
         return "blank";
     }
 
+    #ifdef _WIN32
     // Windows API Function
     void CPPGAME::Windows(std::string Name, int sizeX, int sizeY, HINSTANCE hInstance) {
         const char* CLASS_NAME = Name.c_str();  // Use wide-character class name
@@ -71,13 +72,16 @@ namespace cppgame {
             DispatchMessage(&msg);
         }
     }
+    #endif
 
     void CPPGAME::Linux(std::string Name, int sizeX, int sizeY) {
         std::cerr << "Debug Error. This class hasn't been implemented yet." << std::endl;
+        return;
     }
 
     void CPPGAME::Mac(std::string Name, int sizeX, int sizeY) {
         std::cerr << "Debug Error. This class hasn't been implemented yet." << std::endl;
+        return;
     }
 
     void CPPGAME::SetFavicon(std::string Path){
@@ -85,6 +89,7 @@ namespace cppgame {
         hIcon = (HICON)LoadImageA(NULL, Path.c_str(), IMAGE_ICON,32,32,LR_LOADFROMFILE);    // Default application icon 
         if (!hIcon) {
             std::cerr << "Failed to load icon from path: " << Path << std::endl;
+            return;
         }
     }
 
@@ -126,7 +131,6 @@ LRESULT CALLBACK cppgame::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
     }
     return DefWindowProc(hwnd, uMsg, wParam, lParam);  // Default handling
 }
-#endif
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     cppgame::CPPGAME game;
@@ -135,3 +139,4 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     game.SetFavicon(game.favicon);
     return 0;
 }
+#endif
