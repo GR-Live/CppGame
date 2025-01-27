@@ -23,7 +23,7 @@ namespace cppgame
         std::string os = "";
     public:
         void GenerateWindow(std::string Name, int sizeX, int sizeY,HINSTANCE hInstance);
-        std::string favicon = "Assets/DefaultIcon32.ico";
+        std::string favicon =""/*= "Assets/DefaultIcon32"*/;
     };
     #ifdef _WIN32
     LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);

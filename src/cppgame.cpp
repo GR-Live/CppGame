@@ -110,3 +110,10 @@ LRESULT CALLBACK cppgame::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
     return DefWindowProc(hwnd, uMsg, wParam, lParam);  // Default handling
 }
 #endif
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
+    cppgame::CPPGAME game;
+    game.GenerateWindow("Test", 500, 500, hInstance);
+    game.favicon = "Assets/DefaultIcon32.ico";
+    return 0;
+}
