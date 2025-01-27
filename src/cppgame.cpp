@@ -41,6 +41,7 @@ namespace cppgame {
         
         // Register the window class (ensure you're using the wide version)
         if (RegisterClassW(&wc) == 0) {
+            std::cerr << "GRCG02: Can't register window class. \n";
             return;  // Return if window class registration failed
         }
 
@@ -75,11 +76,11 @@ namespace cppgame {
     }
 
     void CPPGAME::Linux(std::string Name, int sizeX, int sizeY) {
-        // For Linux-specific code here
+        std::cerr << "Debug Error. This class hasn't been implemented yet." << std::endl;
     }
 
     void CPPGAME::Mac(std::string Name, int sizeX, int sizeY) {
-        // For Mac-specific code here
+        std::cerr << "Debug Error. This class hasn't been implemented yet." << std::endl;
     }
 
     // Function to generate the window for a specific OS
