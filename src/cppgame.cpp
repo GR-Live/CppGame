@@ -9,5 +9,16 @@
 // Includes
 #include "cppgame.h"
 
-// Generate Window
+// Get the Current User's Operating System. Different operating systems (oses) have different APIs you need to use. This code is trying to be made to be universal.
 
+std::string getOperatingSystem()
+{
+
+    return "blank";
+}
+
+// Generate Window based on the result from getOperatingSystem()
+
+void GenerateWindow(std::string Name, int sizeX, int sizeY){
+    std::string os = getOperatingSystem();
+}
