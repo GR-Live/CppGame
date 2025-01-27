@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include <windows.h>
+#include <vector>
 
 namespace cppgame
 {
@@ -23,12 +24,10 @@ namespace cppgame
         std::string os = "";
     public:
         void SetFavicon(std::string Path, HWND hwnd);
-        char getFirstCharacter(std::string String);
-        bool isCharacterNotBlank(char Character);
-        
+        void SetColor(std::vector<int> Color);
         std::string getOperatingSystem(); // Get the operating system of the user
         WindowHandle GenerateWindow(std::string Name, int sizeX, int sizeY,HINSTANCE hInstance);
-        std::string favicon =""/*= "Assets/DefaultIcon32"*/;
+        std::string favicon = "Assets/DefaultIcon32";
     };
     #ifdef _WIN32
     LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);

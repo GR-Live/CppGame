@@ -8,6 +8,9 @@
 
 #include "cppgame.h"
 #include <windows.h>
+#include "Departments/Graphics/Images/Favicon/favicon.h"
+#include <codecvt>
+#include <locale>
 
 namespace cppgame {
     // Get the Current User's Operating System.
@@ -28,27 +31,29 @@ namespace cppgame {
     #ifdef _WIN32
     // Windows API Function
     HWND CPPGAME::Windows(std::string Name, int sizeX, int sizeY, HINSTANCE hInstance) {
-        const char* CLASS_NAME = Name.c_str();
-        const char* WindowName = Name.c_str();
+        std::wstring wideName = std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(Name);
+        const wchar_t* CLASS_NAME = wideName.c_str();
+        const wchar_t* WindowName = wideName.c_str();
 
-        WNDCLASSEXA wc = { };
+        WNDCLASSEX wc = { };
 
-        wc.cbSize = sizeof(WNDCLASSEXW);
+        wc.cbSize = sizeof(WNDCLASSEX);
         wc.style = CS_HREDRAW | CS_VREDRAW;
         wc.lpfnWndProc = WindowProc;
         wc.hInstance = hInstance;
         wc.hCursor = LoadCursor(NULL, IDC_ARROW);
         wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
         wc.lpszClassName = CLASS_NAME;
-        
+        CGFavicon::favicon faviconInstance;
+
         // Register the window class (ensure you're using the wide version)
-        if (RegisterClassExA(&wc) == 0) {
+        if (RegisterClassEx(&wc) == 0) {
             std::cerr << "GRCG02: Can't register window class. \n";
             return nullptr;  // Return if window class registration failed
         }
 
         // Create the window using CreateWindowExW (wide-character version)
-        HWND hwnd = CreateWindowExA(
+        HWND hwnd = CreateWindowEx(
             0,                              // Optional window styles
             CLASS_NAME,                     // Window class
             WindowName,                     // Window text (title)
@@ -61,8 +66,16 @@ namespace cppgame {
             NULL                            // Additional application data
         );
 
+        if(!faviconInstance.isCharacterNotBlank(faviconInstance.getFirstCharacter(favicon))){
+            favicon = "Assets/DefaultIcon32.ico";
+            faviconInstance.SetFavicon(favicon, hwnd);
+        }
+        else {
+            faviconInstance.SetFavicon(favicon, hwnd);
+        }
+
         if (!hwnd) {
-            std::cerr << "GRCG03: Window is Invalid. \n";
+            std::cerr << "GRCG03: Window is Invalid. ";
             return nullptr;  // Return if window creation failed
         }
 
@@ -84,19 +97,6 @@ namespace cppgame {
         return nullptr;
     }
 
-    void CPPGAME::SetFavicon(std::string Path, HWND hwnd){
-        HICON hIcon;
-        hIcon = (HICON)LoadImageA(NULL, Path.c_str(), IMAGE_ICON,32,32,LR_LOADFROMFILE);    // Default application icon 
-        if (!hIcon) {
-            std::cerr << "Failed to load icon from path: " << Path << std::endl;
-            return;
-        } else {
-            std::cout << "Loaded Icon: " << Path;
-        }
-
-        SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
-    }
-
     // Function to generate the window for a specific OS
     WindowHandle CPPGAME::GenerateWindow(std::string Name, int sizeX, int sizeY, HINSTANCE hInstance) {
         os = getOperatingSystem();
@@ -112,6 +112,11 @@ namespace cppgame {
             return nullptr;
         }
     }
+    void SetFavicon(std::string Path) {
+        CGFavicon::favicon faviconInstance;
+        faviconInstance.SetFavicon(Path);
+    }
+
 }
 
 // Window Procedure for Windows messages
@@ -139,9 +144,9 @@ LRESULT CALLBACK cppgame::WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     cppgame::CPPGAME game;
+    CGFavicon::favicon faviconInstance;
     game.favicon = "Assets/DefaultIcon32.ico";
     cppgame::WindowHandle hwnd = game.GenerateWindow("Test", 500, 500, hInstance);
-    game.SetFavicon(game.favicon, (HWND)hwnd); 
     MSG msg;
     while (GetMessage(&msg, NULL, 0, 0) > 0) {
         TranslateMessage(&msg);
