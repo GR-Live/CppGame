@@ -23,13 +23,33 @@ std::string getOperatingSystem()
     return "blank";
 }
 
-// Generate Window based on the result from getOperatingSystem()
+// Operating System APIs
 
+void Windows(std::string Name, int sizeX, int sizeY) {
+    // This will use the complex and well integrated Win32 API.
+}
+
+void Linux(std::string Name, int sizeX, int sizeY) {
+
+}
+
+void Apple(std::string Name, int sizeX, int sizeY) {
+
+}
+
+// Generate Window based on the result from getOperatingSystem()
 void GenerateWindow(std::string Name, int sizeX, int sizeY){
     std::string os = getOperatingSystem();
 
-    // Checks to see if os is blank
-    if (os == "blank"){
+    // Checks the Operating System and sends it to their respective APIs
+    // This pains me. I'm not like YendereDev. 
+    if (os == "Windows"){
+        Windows(Name,sizeX,sizeY);
+    } else if (os == "Linux"){
+        Linux(Name,sizeX,sizeY);
+    } else if (os == "Apple"){
+        Apple(Name,sizeX,sizeY);
+    } else {
         std::cerr << "GRCG01: The current operating system can't be identified." << std::endl;
         return;
     }
