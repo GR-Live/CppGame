@@ -10,7 +10,7 @@
 #include <windows.h>
 
 namespace cppgame {
-    // Get the Current User's Operating System. Different operating systems (oses) have different APIs you need to use. This code is trying to be made to be universal.
+    // Get the Current User's Operating System.
     std::string CPPGAME::getOperatingSystem()
     {
         #ifdef _WIN32
@@ -28,10 +28,10 @@ namespace cppgame {
     #ifdef _WIN32
     // Windows API Function
     HWND CPPGAME::Windows(std::string Name, int sizeX, int sizeY, HINSTANCE hInstance) {
-        const char* CLASS_NAME = Name.c_str();  // Use wide-character class name
-        const char* WindowName = Name.c_str();  // Use wide-character window name
+        const char* CLASS_NAME = Name.c_str();
+        const char* WindowName = Name.c_str();
 
-        WNDCLASSEXA wc = { };  // Use WNDCLASSW for wide-character windows API
+        WNDCLASSEXA wc = { };
 
         wc.cbSize = sizeof(WNDCLASSEXW);
         wc.style = CS_HREDRAW | CS_VREDRAW;

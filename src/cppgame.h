@@ -3,7 +3,7 @@
 |*************This File is the only file that should be included. The rest are built in to this program. Just use the "CPPGAME::"" call.************|
 |****************If you are tired of using the call you can include everything with "using namespace cppgame" but it's frowned upon.****************|
 |*****************************************If you use the namespace you can directly type out each function******************************************|
- -----------------------------------------------------------------------------------------===-------------------------------------------------------
+ ---------------------------------------------------------------------------------------------------------------------------------------------------
 */
 
 #pragma once
@@ -23,6 +23,9 @@ namespace cppgame
         std::string os = "";
     public:
         void SetFavicon(std::string Path, HWND hwnd);
+        char getFirstCharacter(std::string String);
+        bool isCharacterNotBlank(char Character);
+        
         std::string getOperatingSystem(); // Get the operating system of the user
         WindowHandle GenerateWindow(std::string Name, int sizeX, int sizeY,HINSTANCE hInstance);
         std::string favicon =""/*= "Assets/DefaultIcon32"*/;
