@@ -9,18 +9,23 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <windows.h>
 
 namespace cppgame
 {
     class CPPGAME {
     private:
         std::string getOperatingSystem();
-        void Windows(std::string Name, int sizeX, int sizeY);
+        void Windows(std::string Name, int sizeX, int sizeY, HINSTANCE hInstance);
         void Linux(std::string Name, int sizeX, int sizeY);
         void Mac(std::string Name, int sizeX, int sizeY);
     protected:
         std::string os = "";
     public:
-        void GenerateWindow(std::string Name, int sizeX, int sizeY);
+        void GenerateWindow(std::string Name, int sizeX, int sizeY,HINSTANCE hInstance);
+        std::string favicon = "Assets/DefaultIcon32.ico";
     };
+    #ifdef _WIN32
+    LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+    #endif
 }
