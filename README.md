@@ -1,4 +1,5 @@
-![CppGame](https://github.com/user-attachments/assets/a97c0777-f1ba-47be-9381-d90acb070bcb)
+
+![CppGame](https://github.com/user-attachments/assets/0e188722-1c7e-4be2-b76c-6f50fdc033ca)
 # C++Game
  C++ Framework to Assist you in making a game in C++.  Please give credits to GR Live
 ## Purpose
